@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="axist.css">
+    <title>modernstatus</title>
+
+    <style>
+        .box {
+            outline: 2px solid var(--light-gray);
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+        }
+        .bb {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        :root {
+            --status-ok: rgb(48, 199, 88);
+            --status-issue: rgb(199, 108, 48);
+            --status-loading:rgb(189, 189, 189);
+        }
+        .flex-v {
+            display: flex;
+            flex-direction: column;
+        }
+        
+    </style>
+
+</head>
+
+<script>
+  window.addEventListener('load', () => {
+    const _status = `$${{StatusJson}}`
+    const statusData = JSON.parse(_status)
+
+    function statusClr(status) {
+      return status ? "var(--status-ok)" : "var(--status-issue)"
+    }
+
+    document.getElementById('name').innerText = statusData.Name || "Raystatus"
+    document.getElementById('main-status').innerText = statusData.EverythingUp ? "All systems operational" : "Experiencing issues"
+    document.getElementById('desc').innerText = statusData.Desc || "Welcome to modernstatus, the default raystatus implementation!"
+    document.getElementById('statusSummary').setAttribute('fill', statusClr(statusData.EverythingUp))
+    
+    statusData.Processes.forEach(process => {
+      const statusItem = `<div class="box bb">
+          <svg style="margin-right: 0.5rem;" width="11" height="11">
+              <circle r="5.5" cx="5.5" cy="5.5" fill="${statusClr(process.Running)}"></circle>
+          </svg>
+          <div class="flex-v">
+              <span>${process.Text}</span>
+              <small style="margin-top: -0.8rem;">${process.Subtext}</small>
+          </div>
+      </div>`
+
+      document.body.insertAdjacentHTML("beforeend", statusItem)
+    });
+  })
+
+</script>
+<body>
+    <h1 id="name">...</h1>
+    <p id="desc" style="margin-bottom: 0.5rem;">...</p>
+
+    <div class="box">
+        <svg style="margin-right: 0.5rem;" width="11" height="11">
+            <circle r="5.5" cx="5.5" cy="5.5" id="statusSummary" fill="var(--status-loading)"></circle>
+        </svg>
+        <span id="main-status">...</span>
+    </div>
+    <hr>
+</body>
+</html>
