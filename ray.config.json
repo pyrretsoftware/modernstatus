@@ -3,12 +3,11 @@
     "Pipeline" : [
       {
         "Tool" : "go",
-        "Command" : "build",
+        "Command" : ["build"],
         "Type" : "build"
       }, 
       {
         "Tool" : "./modernstatus",
-        "Command" : "",
         "Type" : "deploy",
         "Options" : {
             "IfAvailable" : true
@@ -16,7 +15,6 @@
       },
       {
         "Tool" : "./modernstatus.exe",
-        "Command" : "",
         "Type" : "deploy",
         "Options" : {
             "IfAvailable" : true
